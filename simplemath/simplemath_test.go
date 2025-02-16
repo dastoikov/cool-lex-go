@@ -40,7 +40,7 @@ func TestMul(t *testing.T) {
 	test(7, 7, false, 49)
 }
 
-func TestMulAll(t *testing.T) {
+func TestMulRange(t *testing.T) {
 	test := func(a, b uint, overflow bool, expect ...uint) {
 		err := testOverflow(MulRange, a, b, overflow, expect...)
 		if err != nil {
