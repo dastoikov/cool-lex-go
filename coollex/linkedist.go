@@ -71,7 +71,8 @@ type LinkedList struct {
 
 // newLinkedList creates a new LinkedList with the specified number of 0-bits (s) and number of 1-bits (t; precondition: t>0).
 func newLinkedList(s, t uint) LinkedList {
-	// batch allocation of nodes still needs a proper benchmarking before it can replace the code below
+	// batch allocation of nodes still needs proper benchmarking before it can replace the code below
+
 	b := &node{
 		value: true,
 		next:  nil,

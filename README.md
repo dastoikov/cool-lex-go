@@ -4,3 +4,29 @@ The Cool-lex order and algorithms were invented and authored by Frank Ruskey and
 You may need to obtain permission to use Cool-lex, as governed by applicable laws and academic practices.
 
 The code in this repository is authored by the cool-lex-go [contributors](CONTRIBUTORS), and is licensed under Apache License, version 2.0 license.
+
+## Example
+```go
+package main
+import (
+	"fmt"
+	"github.com/dastoikov/cool-lex-go/coollex"
+)
+
+func main() {
+	alg, err := coollex.NewLinkedList(3, 2)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for combination := range alg.Combinations() {
+		for element := range combination {
+			fmt.Print(element)
+		}
+		fmt.Println()
+	}
+	// prints:
+	// 01
+	// 12
+	// 02
+}
+```
