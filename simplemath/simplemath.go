@@ -27,10 +27,7 @@ func MulRange(n2, n1 uint) (r uint, err error) {
 
 	r = n1
 	for n1 < n2 {
-		n1, err = Add(1, n1)
-		if err != nil {
-			return
-		}
+		n1++
 		r, err = Mul(r, n1)
 		if err != nil {
 			return
