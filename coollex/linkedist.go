@@ -30,7 +30,7 @@ type node struct {
 	next  *node
 }
 
-// valueTrueNodes returns an iterator that yields the indices of nodes with a true value,
+// valueTrueNodes returns an iterator that yields the indices of nodes with a true value
 // in the list of nodes reachable from node n.
 //
 // Example:
@@ -42,12 +42,7 @@ type node struct {
 func (n *node) valueTrueNodes() iter.Seq[uint] {
 	return func(yield func(uint) bool) {
 		var i uint
-		for curr := n; curr != nil; curr = curr.next {
-			if curr.value {
-				if !yield(i) {
-					return
-				}
-			}
+		for curr := n; curr != nil && (!curr.value || yield(i)); curr = curr.next {
 			i++
 		}
 	}
