@@ -20,6 +20,10 @@ import (
 	"math/bits"
 )
 
+// MulRange calculates the product of all integers within the inclusive interval [n1, n2] (or [n2, n1] if n2 < n1).
+//
+// It returns the product if no numeric overflow occurs.  Otherwise, it returns an error,
+// and the partial product calculated before the overflow is stored in 'r'.
 func MulRange(n2, n1 uint) (r uint, err error) {
 	if n1 > n2 {
 		n1, n2 = n2, n1
@@ -31,6 +35,7 @@ func MulRange(n2, n1 uint) (r uint, err error) {
 	return
 }
 
+// Add returns the sum of a and b if no numeric overflow occurs, or an error otherwise.
 func Add(a, b uint) (uint, error) {
 	sum, carry := bits.Add(a, b, 0)
 	if carry == 1 {
@@ -39,6 +44,7 @@ func Add(a, b uint) (uint, error) {
 	return sum, nil
 }
 
+// Mul returns the product of a and b, or an error if numeric overflow occurs.
 func Mul(a, b uint) (uint, error) {
 	overflow, product := bits.Mul(a, b)
 	if overflow != 0 {
