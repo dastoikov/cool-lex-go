@@ -14,11 +14,9 @@ import (
 )
 
 func main() {
-	alg, err := coollex.NewLinkedList(3, 2)
-	if err != nil {
-		fmt.Println(err)
-	}
-	for combination := range alg.Combinations() {
+	// no error for n=3, k=2
+	generator, _ := coollex.NewLinkedList(3, 2)
+	for combination := range generator.Combinations() {
 		for element := range combination {
 			fmt.Print(element)
 		}
