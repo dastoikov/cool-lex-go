@@ -58,23 +58,24 @@ type LinkedList struct {
 
 // newLinkedList creates a new LinkedList with the specified number of 0-bits (s) and number of 1-bits (t; precondition: t>0).
 func newLinkedList(s, t uint) LinkedList {
-	nodes := make([]node, s+t)
+	// initial state: ones to the left, zeros to the right
+	len := s + t
+	nodes := make([]node, len)
 	b := &nodes[0]
 	x := &nodes[t-1]
 
-	// initial state: ones to the left, zeros to the right
 	b.value = true
 	curr := b
-	for i := uint(1); i < t; i++ {
+	i := uint(1)
+	for ; i < t; i++ {
 		curr.next = &nodes[i]
 		curr.next.value = true
 		curr = curr.next
 	}
-	for i := uint(0); i < s; i++ {
-		curr.next = &nodes[i+t]
+	for ; i < len; i++ {
+		curr.next = &nodes[i]
 		curr = curr.next
 	}
-
 	return LinkedList{b, x}
 }
 
