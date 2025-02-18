@@ -48,14 +48,6 @@ func (n *node) valueTrueNodes() iter.Seq[uint] {
 	}
 }
 
-func (n *node) createNext(value bool) *node {
-	next := &node{
-		value, nil,
-	}
-	n.next = next
-	return next
-}
-
 // LinkedList implements the LinkedList algorithm from the paper.
 type LinkedList struct {
 	// b, x are named as found in the research paper
@@ -66,22 +58,23 @@ type LinkedList struct {
 
 // newLinkedList creates a new LinkedList with the specified number of 0-bits (s) and number of 1-bits (t; precondition: t>0).
 func newLinkedList(s, t uint) LinkedList {
-	// batch allocation of nodes still needs proper benchmarking before it can replace the code below
-
-	b := &node{
-		value: true,
-		next:  nil,
-	}
-	x := b
+	nodes := make([]node, s+t)
+	b := &nodes[0]
+	x := &nodes[t-1]
 
 	// initial state: ones to the left, zeros to the right
-	for ; t > 1; t-- {
-		x = x.createNext(true)
+	b.value = true
+	curr := b
+	for i := uint(1); i < t; i++ {
+		curr.next = &nodes[i]
+		curr.next.value = true
+		curr = curr.next
 	}
-	var last = x
-	for ; s > 0; s-- {
-		last = last.createNext(false)
+	for i := uint(0); i < s; i++ {
+		curr.next = &nodes[i+t]
+		curr = curr.next
 	}
+
 	return LinkedList{b, x}
 }
 
