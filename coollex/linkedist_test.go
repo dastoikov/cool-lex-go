@@ -17,6 +17,35 @@ import (
 	"testing"
 )
 
+// Number of nodes for benchmarking newLinkedList.
+// That is, the number of elements to choose from, or n.
+const (
+	HIGH   = uint(360_000_000) //
+	MEDIUM = uint(780_000)
+	LOW    = uint(90)
+)
+
+func BenchmarkNewLinkedListLow(b *testing.B) {
+	lo := LOW / 3
+	for i := 0; i < b.N; i++ {
+		_ = newLinkedList(lo*2, lo)
+	}
+}
+
+func BenchmarkNewLinkedListMedium(b *testing.B) {
+	md := MEDIUM / 3
+	for i := 0; i < b.N; i++ {
+		_ = newLinkedList(md*2, md)
+	}
+}
+
+func BenchmarkNewLinkedListHigh(b *testing.B) {
+	up := HIGH / 3
+	for i := 0; i < b.N; i++ {
+		_ = newLinkedList(up*2, up)
+	}
+}
+
 func TestValueTrueNodes(t *testing.T) {
 	listOf := func(values []bool) *node {
 		if len(values) == 0 {

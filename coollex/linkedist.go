@@ -58,23 +58,55 @@ type LinkedList struct {
 
 // newLinkedList creates a new LinkedList with the specified number of 0-bits (s) and number of 1-bits (t; precondition: t>0).
 func newLinkedList(s, t uint) LinkedList {
-	// initial state: ones to the left, zeros to the right
-	len := s + t
-	nodes := make([]node, len)
+	// initial state: ones to the head, zeros to the tail
+	// todo(das): allocate in chunks for large sizes
+	size := s + t
+	nodes := make([]node, size)
+
 	b := &nodes[0]
+	b.value = true
 	x := &nodes[t-1]
 
-	b.value = true
-	curr := b
+	prev := b
 	i := uint(1)
 	for ; i < t; i++ {
-		curr.next = &nodes[i]
-		curr.next.value = true
-		curr = curr.next
+		prev = link(prev, &nodes[i])
+		prev.value = true
 	}
-	for ; i < len; i++ {
-		curr.next = &nodes[i]
-		curr = curr.next
+	for ; i < size; i++ {
+		prev = link(prev, &nodes[i])
+	}
+	return LinkedList{b, x}
+}
+
+//go:inline
+func link(prev, curr *node) *node {
+	prev.next = curr
+	return curr
+}
+
+var _ = newLinkedListNoNewVars
+
+func newLinkedListNoNewVars(s, t uint) LinkedList {
+	// initial state: ones to the head, zeros to the tail
+	// todo(das): allocate in chunks for large sizes
+	t = s + t
+	nodes := make([]node, t)
+
+	t--
+	b := &nodes[t]
+	b.value = true
+
+	prev := b
+	for t > s {
+		t--
+		prev = link(prev, &nodes[t])
+		prev.value = true
+	}
+	x := prev
+	for t > 0 {
+		t--
+		prev = link(prev, &nodes[t])
 	}
 	return LinkedList{b, x}
 }
