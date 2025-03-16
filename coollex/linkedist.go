@@ -128,24 +128,24 @@ func (list *LinkedList) next() {
 	}
 }
 
-// ElementIterator is an iterator over the elements of a combination.
-type ElementIterator = iter.Seq[uint]
+// Elements is an iterator over the elements of a combination.
+type Elements = iter.Seq[uint]
 
-// CombinationIterator is an iterator over combinations.
-type CombinationIterator = iter.Seq[ElementIterator]
+// Combinations is an iterator over combinations.
+type Combinations = iter.Seq[Elements]
 
 // Elements returns an iterator over the elements selected for the current combination.
-func (list *LinkedList) Elements() ElementIterator {
+func (list *LinkedList) Elements() Elements {
 	return list.b.valueTrueNodes()
 }
 
 // Combinations returns an iterator over the generated combinations.
-func (list *LinkedList) Combinations() CombinationIterator {
+func (list *LinkedList) Combinations() Combinations {
 	// k=0 -> b=nil (the list has no head)
 	if list.b == nil {
-		return func(yield func(ElementIterator) bool) {}
+		return func(yield func(Elements) bool) {}
 	}
-	return func(yield func(ElementIterator) bool) {
+	return func(yield func(Elements) bool) {
 		//the algorithm is initially positioned at the first combination
 		for yield(list.Elements()) && list.hasNext() {
 			list.next()
