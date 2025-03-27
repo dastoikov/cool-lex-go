@@ -13,6 +13,7 @@ package simplemath
 
 import (
 	"fmt"
+	"iter"
 	"math"
 	"testing"
 )
@@ -82,4 +83,71 @@ func TestNumComb(t *testing.T) {
 	}
 	test(2, 0, 1)
 	test(3, 2, 3)
+}
+
+// --- DOZ ---
+
+var (
+	benchmarkDataDoz = map[int64]int64{
+		-128:                128,
+		math.MaxInt64 - 128: math.MaxInt64,
+		math.MinInt64:       math.MinInt64 + 128,
+	}
+)
+
+func bechmarkBinaryFunction64I(lo, hi int64, biFunc func(int64, int64) int64) {
+	for a := lo; a < hi; a++ {
+		for b := lo; b < hi; b++ {
+			_ = biFunc(a, b)
+		}
+	}
+}
+
+func BenchmarkDozInt64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for lo, hi := range benchmarkDataDoz {
+			bechmarkBinaryFunction64I(lo, hi, Doz64)
+		}
+	}
+}
+
+func BenchmarkDozBInt64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for lo, hi := range benchmarkDataDoz {
+			bechmarkBinaryFunction64I(lo, hi, DozB64)
+		}
+	}
+}
+
+func TestDoz64(t *testing.T) {
+	test := func(a, b int64) {
+		t.Helper()
+		expect := DozB64(a, b)
+		actual := Doz64(a, b)
+		if actual != expect {
+			t.Fatalf("doz: for a=%v, b=%v expected %v, got %v (%b)", a, b, expect, actual, actual)
+		}
+	}
+
+	// use only a handful of all numbers for sanity-testing the function
+	for a := range allInt8() {
+		for b := range allInt8() {
+			test(int64(a), int64(b))
+		}
+	}
+
+	test(math.MinInt64, math.MinInt64)
+	test(math.MaxInt64, math.MaxInt64)
+	test(math.MaxInt64, math.MinInt64)
+	test(math.MinInt64, math.MaxInt64)
+}
+
+func allInt8() iter.Seq[int8] {
+	return func(yield func(int8) bool) {
+		for i := int8(math.MinInt8); ; i++ {
+			if !yield(i) || i == math.MaxInt8 {
+				return
+			}
+		}
+	}
 }

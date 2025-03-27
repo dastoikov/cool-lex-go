@@ -86,3 +86,32 @@ func Factorial(n uint) (uint, error) {
 	}
 	return MulRange(n, 1)
 }
+
+// BitEq64 implements the bitwise-equivalence operation, that is, NOT(XOR(a,b)).
+//
+//go:inline
+func BitEq64(a, b int64) int64 {
+	return ^(a ^ b)
+}
+
+// DozB64 implements the difference-or-zero function.
+// DozB64(a,b) is a - b if a >= b, and is 0 if a < b.
+//
+// It is named "saturated subtraction" in The Coolest Way to Generate Combinations paper
+// by Frank Ruskey and Aaron Williams, see 3.3. Implementation in Computer words, page 10.
+//
+// See also: `simplemath.Doz64`.
+func DozB64(a, b int64) int64 {
+	if a < b {
+		return 0
+	}
+	return a - b
+}
+
+// Doz64 implements the difference-or-zero function, in a branchless fashion.
+// See `simplemath.DozB64` for details.
+func Doz64(a, b int64) int64 {
+	// see Hacker's Delight by Henry S. Warren, Jr., 2-18 Doz, Max, Min, pages 37-38.
+	d := a - b
+	return d & (BitEq64(d, (a^b)&(a^d)) >> 63)
+}

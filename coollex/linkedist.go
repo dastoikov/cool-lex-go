@@ -10,14 +10,6 @@
 // express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*
-Package coollex provides implementations of the different Cool-lex algorithms presented in the
-_The Coolest Way to Generate Combinations_ paper by Frank Ruskey and Aaron Williams.
-
-Hats off.
-
-See http://webhome.cs.uvic.ca/~ruskey/Publications/Coollex/CoolComb.html, section **3.2. Iterative Algorithms.**
-*/
 package coollex
 
 import (
@@ -48,7 +40,7 @@ func (n *node) valueTrueNodes() iter.Seq[uint] {
 	}
 }
 
-// LinkedList implements the LinkedList algorithm from the paper.
+// LinkedList implements the LinkedList algorithm from the paper, see section 3.2. Iterative Algorithms, page 8
 type LinkedList struct {
 	// b, x are named as found in the research paper
 	// b - the head of the list; this is the node with the greatest "index"
@@ -116,7 +108,7 @@ func (list *LinkedList) hasNext() bool {
 	return list.x.next != nil
 }
 
-// next advances the LinkedList to the next combination in cool-lex order
+// next advances to the next combination in cool-lex order
 func (list *LinkedList) next() {
 	y := list.x.next
 	list.x.next = list.x.next.next
@@ -127,12 +119,6 @@ func (list *LinkedList) next() {
 		list.x = list.b.next
 	}
 }
-
-// Elements is an iterator over the elements of a combination.
-type Elements = iter.Seq[uint]
-
-// Combinations is an iterator over combinations.
-type Combinations = iter.Seq[Elements]
 
 // Elements returns an iterator over the elements selected for the current combination.
 func (list *LinkedList) Elements() Elements {
