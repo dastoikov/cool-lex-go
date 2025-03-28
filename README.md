@@ -7,7 +7,7 @@ The code in this repository is authored by the cool-lex-go [contributors](CONTRI
 
 ## Examples
 
-### LinkedList
+**LinkedList**
 
 ```go
 package main
@@ -32,7 +32,7 @@ func main() {
 }
 ```
 
-### ComputerWord, 64-bit
+**ComputerWord, 64-bit**
 
 ```go
 package main
