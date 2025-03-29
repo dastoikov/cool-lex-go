@@ -58,7 +58,7 @@ func TestElements(t *testing.T) {
 	}
 }
 
-func TestNewComputerWord64(t *testing.T) {
+func TestComputerWord64(t *testing.T) {
 	testCoollex(t, func(n, k uint) (coollexAlgorithm, error) {
 		w, err := NewComputerWord64(n, k)
 		return &w, err
