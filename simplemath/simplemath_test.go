@@ -95,10 +95,20 @@ var (
 	}
 )
 
-func bechmarkBinaryFunction64I(lo, hi int64, biFunc func(int64, int64) int64) {
-	for a := lo; a < hi; a++ {
-		for b := lo; b < hi; b++ {
+// rangeCartesianProduct applies biFunc to the Cartesian product of the specified range (inclusive), pairwise.
+func rangeCartesianProduct(lo, hi int64, biFunc func(int64, int64) int64) {
+	if lo > hi {
+		lo, hi = hi, lo
+	}
+	for a := lo; ; a++ {
+		for b := lo; ; b++ {
 			_ = biFunc(a, b)
+			if b == hi {
+				break
+			}
+		}
+		if a == hi {
+			break
 		}
 	}
 }
@@ -106,7 +116,7 @@ func bechmarkBinaryFunction64I(lo, hi int64, biFunc func(int64, int64) int64) {
 func BenchmarkDoz64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for lo, hi := range benchmarkDataDoz {
-			bechmarkBinaryFunction64I(lo, hi, Doz64)
+			rangeCartesianProduct(lo, hi, Doz64)
 		}
 	}
 }
@@ -114,7 +124,7 @@ func BenchmarkDoz64(b *testing.B) {
 func BenchmarkDozB64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for lo, hi := range benchmarkDataDoz {
-			bechmarkBinaryFunction64I(lo, hi, DozB64)
+			rangeCartesianProduct(lo, hi, DozB64)
 		}
 	}
 }
