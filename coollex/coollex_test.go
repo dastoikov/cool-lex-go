@@ -16,6 +16,12 @@ import (
 	"testing"
 )
 
+// `n` and `k` for benchmarking the different Cool-lex algorithms
+const (
+	benchAlgorithmN = 33
+	benchAlgorithmK = 3
+)
+
 func testCoollex(t *testing.T, generator func(n, k uint) (coollexAlgorithm, error)) {
 	testNoCombs := func(n, k uint) {
 		alg, _ := generator(n, k)

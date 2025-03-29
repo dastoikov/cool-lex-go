@@ -17,7 +17,7 @@ import (
 
 func BenchmarkComputerWord(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		w, _ := NewComputerWord64(BenchIterateN, BenchIterateK)
+		w, _ := NewComputerWord64(benchAlgorithmN, benchAlgorithmK)
 		for w.hasNext() {
 			w.next()
 		}

@@ -35,8 +35,3 @@ type Combinations = iter.Seq[Elements]
 type coollexAlgorithm interface {
 	Combinations() Combinations
 }
-
-const (
-	BenchIterateN = 33
-	BenchIterateK = 3
-)

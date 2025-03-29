@@ -18,7 +18,7 @@ import (
 
 func BenchmarkLinkedList(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		list, _ := NewLinkedList(BenchIterateN, BenchIterateK)
+		list, _ := NewLinkedList(benchAlgorithmN, benchAlgorithmK)
 		_ = list
 		for list.hasNext() {
 			list.next()
