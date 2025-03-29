@@ -56,3 +56,26 @@ func main() {
 	// 02
 }
 ```
+
+or
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/dastoikov/cool-lex-go/coollex"
+)
+
+func main() {
+
+	generator, _ := coollex.NewComputerWord64(3, 2)
+	for combination := range generator.Words() {
+		fmt.Printf("%03b\n", combination)
+	}
+	// prints:
+	// 011
+	// 110
+	// 101
+}
+```

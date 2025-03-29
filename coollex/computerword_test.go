@@ -15,6 +15,12 @@ import (
 	"testing"
 )
 
+const (
+	benchElementsLowDensity  int64 = 0b0110_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
+	benchElementsMidDensity  int64 = 0b0111_1000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000
+	benchElementsHighDensity int64 = 0b0001_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111
+)
+
 func BenchmarkComputerWord(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		w, _ := NewComputerWord64(benchAlgorithmN, benchAlgorithmK)
@@ -26,35 +32,24 @@ func BenchmarkComputerWord(b *testing.B) {
 
 func BenchmarkElements(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		v := uint64(0b11111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_00_1)
-		for e := range elements(int64(v)) {
+		for e := range elements(benchElementsLowDensity) {
+			_ = e
+		}
+		for e := range elements(benchElementsMidDensity) {
+			_ = e
+		}
+		for e := range elements(benchElementsHighDensity) {
 			_ = e
 		}
 	}
 }
-
 func TestElements(t *testing.T) {
-	v := uint64(0b11111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_00_1)
-	expect := [34]uint64{
-		0,
-		3, 4, 5, 6,
-		11, 12, 13, 14,
-		19, 20, 21, 22,
-		27, 28, 29, 30,
-		35, 36, 37, 38,
-		43, 44, 45, 46,
-		51, 52, 53, 54,
-		59, 60, 61, 62, 63,
-	}
-	actual := [34]uint64{}
-
-	i := 0
-	for e := range elements(int64(v)) {
-		actual[i] = uint64(e)
-		i++
-	}
-	if actual != expect {
-		t.Fatalf("expect %v, actual %v", expect, actual)
+	coollex, _ := NewComputerWord64(63, 2)
+	for combination := range coollex.Words() {
+		e := elements(combination)
+		if word := toInt64(e); word != combination {
+			t.Fatalf("expect %v, actual %v", combination, word)
+		}
 	}
 }
 
@@ -67,4 +62,12 @@ func TestComputerWord64(t *testing.T) {
 	if _, err := NewComputerWord64(64, 1); err == nil {
 		t.Fatalf("error is expected for n>=64")
 	}
+}
+
+func toInt64(elements Elements) int64 {
+	result := int64(0)
+	for element := range elements {
+		result |= 1 << element
+	}
+	return result
 }

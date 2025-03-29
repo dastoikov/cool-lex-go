@@ -15,7 +15,9 @@ package coollex
 import (
 	"fmt"
 	"github.com/dastoikov/cool-lex-go/simplemath"
+	"iter"
 	"math"
+	"math/bits"
 )
 
 // ComputerWord64 implements the register (computer words)-based algorithm from the paper,
@@ -43,12 +45,24 @@ func (word *ComputerWord64) next() {
 	word.r3 = r3 + r1 - r0
 }
 
-//go:inline
 func elements(v int64) Elements {
 	return func(yield func(uint) bool) {
 		// todo(das): there must be better ways to do this
-		r := v
-		for i := uint(0); i < 64 && (r&1 == 0 || yield(i)); r = r >> 1 {
+		r := uint64(v)
+		var i uint = 0
+		for { // t>0
+			if ntz := bits.TrailingZeros64(r); ntz != 0 {
+				i += uint(ntz)
+				r >>= ntz
+				continue
+			}
+			if !yield(i) {
+				return
+			}
+			r >>= 1
+			if r == 0 {
+				return
+			}
 			i++
 		}
 	}
@@ -71,6 +85,18 @@ func (word *ComputerWord64) Elements() Elements {
 func (word *ComputerWord64) Combinations() Combinations {
 	return func(yield func(Elements) bool) {
 		for word.hasNext() && yield(word.Elements()) {
+			word.next()
+		}
+	}
+}
+
+// Words returns an iterator over the generated combinations as follows:
+// * a combination is represented by a `int64` value
+// * in a combination, bits that are set represent the elements selected for the combination
+// * the `n` least-significant bits store the combination, the other bits are cleared
+func (word *ComputerWord64) Words() iter.Seq[int64] {
+	return func(yield func(int64) bool) {
+		for word.hasNext() && yield(word.r3) {
 			word.next()
 		}
 	}

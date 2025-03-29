@@ -16,8 +16,8 @@ import (
 	"testing"
 )
 
-// `n` and `k` for benchmarking the different Cool-lex algorithms
 const (
+	// `n` and `k` for benchmarking the different Cool-lex algorithms
 	benchAlgorithmN = 33
 	benchAlgorithmK = 3
 )
