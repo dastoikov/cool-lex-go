@@ -68,7 +68,7 @@ import (
 )
 
 func main() {
-
+	// no error for n=3, k=2
 	generator, _ := coollex.NewComputerWord64(3, 2)
 	for combination := range generator.Words() {
 		fmt.Printf("%03b\n", combination)

@@ -47,23 +47,12 @@ func (word *ComputerWord64) next() {
 
 func elements(v int64) Elements {
 	return func(yield func(uint) bool) {
-		// todo(das): there must be better ways to do this
-		r := uint64(v)
-		var i uint = 0
-		for { // t>0
-			if ntz := bits.TrailingZeros64(r); ntz != 0 {
-				i += uint(ntz)
-				r >>= ntz
-				continue
+		for r := uint64(v); r != 0; {
+			ntz := bits.TrailingZeros64(r)
+			if !yield(uint(ntz)) {
+				break
 			}
-			if !yield(i) {
-				return
-			}
-			r >>= 1
-			if r == 0 {
-				return
-			}
-			i++
+			r &= ^(1 << ntz)
 		}
 	}
 }
@@ -91,7 +80,7 @@ func (word *ComputerWord64) Combinations() Combinations {
 }
 
 // Words returns an iterator over the generated combinations as follows:
-// * a combination is represented by a `int64` value
+// * a combination is represented by an `int64` value
 // * in a combination, bits that are set represent the elements selected for the combination
 // * the `n` least-significant bits store the combination, the other bits are cleared
 func (word *ComputerWord64) Words() iter.Seq[int64] {
