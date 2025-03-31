@@ -29,7 +29,27 @@ func BenchmarkComputerWord(b *testing.B) {
 		}
 	}
 }
-
+func BenchmarkElementsLowDensity(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for e := range elements(benchElementsLowDensity) {
+			_ = e
+		}
+	}
+}
+func BenchmarkElementsMidDensity(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for e := range elements(benchElementsMidDensity) {
+			_ = e
+		}
+	}
+}
+func BenchmarkElementsHighDensity(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for e := range elements(benchElementsHighDensity) {
+			_ = e
+		}
+	}
+}
 func BenchmarkElements(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for e := range elements(benchElementsLowDensity) {
@@ -45,6 +65,13 @@ func BenchmarkElements(b *testing.B) {
 }
 func TestElements(t *testing.T) {
 	coollex, _ := NewComputerWord64(63, 2)
+	for combination := range coollex.Words() {
+		e := elements(combination)
+		if word := toInt64(e); word != combination {
+			t.Fatalf("expect %v, actual %v", combination, word)
+		}
+	}
+	coollex, _ = NewComputerWord64(63, 61)
 	for combination := range coollex.Words() {
 		e := elements(combination)
 		if word := toInt64(e); word != combination {

@@ -79,3 +79,38 @@ func main() {
 	// 101
 }
 ```
+
+or, if it is desirable to use a custom function that "unpacks" the `int64` combination into bit indices of
+selected elements (e.g., if `k` is close to `n`):
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/dastoikov/cool-lex-go/coollex"
+)
+
+func main() {
+	// when `k` is close to `n`, e.g., n=63,k=61
+	elements := func(combination int64) coollex.Elements {
+		return func(yield func(uint) bool) {
+			r := combination
+			for i := uint(0); r != 0 && (r&1 == 0 || yield(i)); r >>= 1 {
+				i++
+			}
+		}
+	}
+
+	generator, _ := coollex.NewComputerWord64(3, 2)
+	for combination := range generator.Words() {
+		for element := range elements(combination) {
+			fmt.Print(element)
+		}
+		fmt.Println()
+	}
+	// prints:
+	// 01
+	// 12
+	// 02
+}
+```
