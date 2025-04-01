@@ -57,7 +57,7 @@ func main() {
 }
 ```
 
-or
+Alternatively, if it is preferable to work with the combination stored in an `int64` value directly:
 
 ```go
 package main
@@ -80,23 +80,28 @@ func main() {
 }
 ```
 
-or, if it is desirable to use a custom function that "unpacks" the `int64` combination into bit indices of
-selected elements (e.g., if `k` is close to `n`):
+Alternatively, if it is preferable to use a custom function for retrieving the set bits from an `int64` combination:
+
 ```go
 package main
 
 import (
 	"fmt"
 	"github.com/dastoikov/cool-lex-go/coollex"
+	"math/bits"
 )
 
 func main() {
-	// when `k` is close to `n`, e.g., n=63,k=61
+	// If popcount is fast...
+	// (Note: the code below is just for illustration purposes as the built-in elements() is generally faster.)
 	elements := func(combination int64) coollex.Elements {
 		return func(yield func(uint) bool) {
-			r := combination
-			for i := uint(0); r != 0 && (r&1 == 0 || yield(i)); r >>= 1 {
-				i++
+			for r := uint64(combination); r != 0; {
+				ntz := bits.OnesCount64(^r & (r - 1)) // set trailing 0-bits, clear all others
+				if !yield(uint(ntz)) {
+					break
+				}
+				r &= r - 1 // turn off the right-most 1-bit
 			}
 		}
 	}
