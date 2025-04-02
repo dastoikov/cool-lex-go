@@ -93,15 +93,15 @@ import (
 
 func main() {
 	// If popcount is fast...
-	// (Note: the code below is just for illustration purposes as the built-in elements() is generally faster.)
+	// Note: the following code is illustrative; Elements() is generally faster.
 	elements := func(combination int64) coollex.Elements {
 		return func(yield func(uint) bool) {
 			for r := uint64(combination); r != 0; {
-				ntz := bits.OnesCount64(^r & (r - 1)) // set trailing 0-bits, clear all others
+				ntz := bits.OnesCount64(^r & (r - 1)) // 101000 -> pop(000111)
 				if !yield(uint(ntz)) {
 					break
 				}
-				r &= r - 1 // turn off the right-most 1-bit
+				r &= r - 1 // clear the rightmost 1-bit
 			}
 		}
 	}

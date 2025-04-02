@@ -52,7 +52,7 @@ func elements(v int64) Elements {
 			if !yield(uint(ntz)) {
 				break
 			}
-			// turn off the right-most 1-bit
+			// clear the rightmost 1-bit
 			// see Hacker's Delight by Henry S. Warren, Jr., 2-1 Manipulating the Rightmost Bits, page 11.
 			r &= r - 1
 		}
