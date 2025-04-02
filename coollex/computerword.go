@@ -40,7 +40,7 @@ func (word *ComputerWord64) next() {
 	r1 := r0 ^ (r0 - 1)
 	r0 = r1 + 1
 	r1 = r1 & r3
-	r0 = simplemath.Doz64(r0&r3, 1)
+	r0 = simplemath.DozB64(r0&r3, 1) // Doz64 is faster but only in isolation;
 
 	word.r3 = r3 + r1 - r0
 }

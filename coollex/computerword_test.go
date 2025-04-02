@@ -21,7 +21,7 @@ const (
 	benchElementsHighDensity int64 = 0b0001_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111
 )
 
-func BenchmarkComputerWord(b *testing.B) {
+func BenchmarkComputerWord64(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		w, _ := NewComputerWord64(benchAlgorithmN, benchAlgorithmK)
 		for w.hasNext() {
