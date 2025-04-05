@@ -82,22 +82,42 @@ func main() {
 
 Alternatively, if it is preferable to use a custom function for retrieving the set bits from an `int64` combination:
 
+Note: the following code is illustrative.
+
+popcnt_asm_amd64.s:
+```asm
+#include "textflag.h"
+
+// func popCount(x uint64) uint64
+TEXT ·popCount(SB),$0-16
+	MOVQ    x+0(FP), CX
+	POPCNTQ CX, CX
+	MOVQ    CX, ret+8(FP)
+	RET
+```
+
+popcnt_asm_amd64.go:
+```go
+package main
+
+//go:nosplit
+//go:noinline
+func popCount(x uint64) uint64
+```
+
 ```go
 package main
 
 import (
 	"fmt"
 	"github.com/dastoikov/cool-lex-go/coollex"
-	"math/bits"
 )
 
 func main() {
-	// If popcount is fast...
-	// Note: the following code is illustrative; Elements() is generally faster.
 	elements := func(combination int64) coollex.Elements {
 		return func(yield func(uint) bool) {
 			for r := uint64(combination); r != 0; {
-				ntz := bits.OnesCount64(^r & (r - 1)) // 101000 -> pop(000111)
+				ntz := popCount(^r & (r - 1)) // 101000 -> popCount(000111)
 				if !yield(uint(ntz)) {
 					break
 				}
