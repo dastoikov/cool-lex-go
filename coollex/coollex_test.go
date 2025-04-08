@@ -18,7 +18,7 @@ import (
 
 const (
 	// `n` and `k` for benchmarking the different Cool-lex algorithms
-	benchAlgorithmN = 33
+	benchAlgorithmN = 31
 	benchAlgorithmK = 3
 )
 

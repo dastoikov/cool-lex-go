@@ -88,9 +88,12 @@ func Factorial(n uint) (uint, error) {
 }
 
 // BitEq64 implements the bitwise-equivalence operation, that is, NOT(XOR(a,b)).
-//
-//go:inline
 func BitEq64(a, b int64) int64 {
+	return ^(a ^ b)
+}
+
+// BitEq32 implements the bitwise-equivalence operation, that is, NOT(XOR(a,b)).
+func BitEq32(a, b int32) int32 {
 	return ^(a ^ b)
 }
 
@@ -114,4 +117,21 @@ func Doz64(a, b int64) int64 {
 	// see Hacker's Delight by Henry S. Warren, Jr., 2-18 Doz, Max, Min, pages 37-38.
 	d := a - b
 	return d & (BitEq64(d, (a^b)&(a^d)) >> 63)
+}
+
+// DozB32 implements the difference-or-zero function.
+// See `simplemath.DozB64` for details.
+func DozB32(a, b int32) int32 {
+	if a < b {
+		return 0
+	}
+	return a - b
+}
+
+// Doz32 implements the difference-or-zero function, in a branchless fashion.
+// See `simplemath.DozB64` for details.
+func Doz32(a, b int32) int32 {
+	// see Hacker's Delight by Henry S. Warren, Jr., 2-18 Doz, Max, Min, pages 37-38.
+	d := a - b
+	return d & (BitEq32(d, (a^b)&(a^d)) >> 31)
 }

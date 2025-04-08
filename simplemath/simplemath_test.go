@@ -152,6 +152,29 @@ func TestDoz64(t *testing.T) {
 	test(math.MinInt64, math.MaxInt64)
 }
 
+func TestDoz32(t *testing.T) {
+	test := func(a, b int32) {
+		t.Helper()
+		expect := DozB32(a, b)
+		actual := Doz32(a, b)
+		if actual != expect {
+			t.Fatalf("doz: for a=%v, b=%v expected %v, got %v (%b)", a, b, expect, actual, actual)
+		}
+	}
+
+	// use only a handful of all numbers for sanity-testing the function
+	for a := range allInt8() {
+		for b := range allInt8() {
+			test(int32(a), int32(b))
+		}
+	}
+
+	test(math.MinInt32, math.MinInt32)
+	test(math.MaxInt32, math.MaxInt32)
+	test(math.MaxInt32, math.MinInt32)
+	test(math.MinInt32, math.MaxInt32)
+}
+
 func allInt8() iter.Seq[int8] {
 	return func(yield func(int8) bool) {
 		for i := int8(math.MinInt8); ; i++ {

@@ -16,9 +16,9 @@ import (
 )
 
 const (
-	benchElementsLowDensity  int64 = 0b0110_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
-	benchElementsMidDensity  int64 = 0b0111_1000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000
-	benchElementsHighDensity int64 = 0b0001_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111
+	benchElementsLowDensity64  int64 = 0b0110_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
+	benchElementsMidDensity64  int64 = 0b0111_1000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000_1111_0000
+	benchElementsHighDensity64 int64 = 0b0001_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111
 )
 
 func BenchmarkComputerWord64(b *testing.B) {
@@ -29,51 +29,51 @@ func BenchmarkComputerWord64(b *testing.B) {
 		}
 	}
 }
-func BenchmarkElementsLowDensity(b *testing.B) {
+func BenchmarkElementsLowDensity64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		for e := range elements(benchElementsLowDensity) {
+		for e := range elements64(benchElementsLowDensity64) {
 			_ = e
 		}
 	}
 }
-func BenchmarkElementsMidDensity(b *testing.B) {
+func BenchmarkElementsMidDensity64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		for e := range elements(benchElementsMidDensity) {
+		for e := range elements64(benchElementsMidDensity64) {
 			_ = e
 		}
 	}
 }
-func BenchmarkElementsHighDensity(b *testing.B) {
+func BenchmarkElementsHighDensity64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		for e := range elements(benchElementsHighDensity) {
+		for e := range elements64(benchElementsHighDensity64) {
 			_ = e
 		}
 	}
 }
-func BenchmarkElements(b *testing.B) {
+func BenchmarkElements64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		for e := range elements(benchElementsLowDensity) {
+		for e := range elements64(benchElementsLowDensity64) {
 			_ = e
 		}
-		for e := range elements(benchElementsMidDensity) {
+		for e := range elements64(benchElementsMidDensity64) {
 			_ = e
 		}
-		for e := range elements(benchElementsHighDensity) {
+		for e := range elements64(benchElementsHighDensity64) {
 			_ = e
 		}
 	}
 }
-func TestElements(t *testing.T) {
+func TestElements64(t *testing.T) {
 	coollex, _ := NewComputerWord64(63, 2)
 	for combination := range coollex.Words() {
-		e := elements(combination)
+		e := elements64(combination)
 		if word := toInt64(e); word != combination {
 			t.Fatalf("expect %v, actual %v", combination, word)
 		}
 	}
 	coollex, _ = NewComputerWord64(63, 61)
 	for combination := range coollex.Words() {
-		e := elements(combination)
+		e := elements64(combination)
 		if word := toInt64(e); word != combination {
 			t.Fatalf("expect %v, actual %v", combination, word)
 		}

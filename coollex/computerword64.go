@@ -20,7 +20,7 @@ import (
 	"math/bits"
 )
 
-// ComputerWord64 implements the register (computer words)-based algorithm from the paper,
+// ComputerWord64 implements the register-based (computer words) algorithm from the paper,
 // see 3.3. Implementation in Computer Words, page 10.
 // The implementation here is based on 64-bit registers, allowing for `n<=63`.
 type ComputerWord64 struct {
@@ -45,7 +45,7 @@ func (word *ComputerWord64) next() {
 	word.r3 = r3 + r1 - r0
 }
 
-func elements(v int64) Elements {
+func elements64(v int64) Elements {
 	return func(yield func(uint) bool) {
 		for r := uint64(v); r != 0; {
 			ntz := bits.TrailingZeros64(r)
@@ -69,7 +69,7 @@ func newComputerWord64(s, t uint) ComputerWord64 {
 
 // Elements returns an iterator over the elements selected for the current combination.
 func (word *ComputerWord64) Elements() Elements {
-	return elements(word.r3)
+	return elements64(word.r3)
 }
 
 // Combinations returns an iterator over the generated combinations.
