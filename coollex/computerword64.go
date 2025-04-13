@@ -14,7 +14,7 @@ package coollex
 
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/simplemath"
+	"github.com/dastoikov/cool-lex-go/v2/simplemath"
 	"iter"
 	"math"
 	"math/bits"

@@ -12,7 +12,7 @@
 package coollex
 
 import (
-	"github.com/dastoikov/cool-lex-go/simplemath"
+	"github.com/dastoikov/cool-lex-go/v2/simplemath"
 	"testing"
 )
 
