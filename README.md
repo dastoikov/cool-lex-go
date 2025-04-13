@@ -13,7 +13,7 @@ The code in this repository is authored by the cool-lex-go [contributors](CONTRI
 package main
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/coollex"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 package main
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/coollex"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
 )
 
 func main() {
@@ -64,7 +64,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/coollex"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
 )
 
 func main() {
@@ -108,7 +108,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/coollex"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
 )
 
 func main() {
@@ -148,7 +148,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/coollex"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
 )
 
 func main() {
