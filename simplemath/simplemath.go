@@ -54,6 +54,7 @@ func Mul(a, b uint) (uint, error) {
 }
 
 // NumComb calculates the number of combinations for the specified k and n.
+// In other words, it calculates the binomial coefficient: C(n,k)=n!/k!(n-k)!.
 //
 // n: number of elements to combine; n>=k must hold.
 // k: number of elements in a combination.
