@@ -27,7 +27,6 @@ import "iter"
 
 // Elements is an iterator over the elements of a combination. The iterator yields exactly
 // k elements. Every element is in the range [0, n).
-
 type Elements = iter.Seq[uint]
 
 // Combinations is an iterator over combinations.
