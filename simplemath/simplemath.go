@@ -11,7 +11,11 @@
 // limitations under the License.
 
 /*
-Package simplemath offers simple/naive implementations of math operations for the purposes of aiding in writing auto tests.
+Package simplemath implements math operations used by the algorithms in the coollex package.
+
+Additionally, it includes simple, naive implementations of math operations that are designed
+to facilitate writing tests. These functions return an error upon numeric overflow: Add, Mul, etc.
+They are used exclusively in tests and not in the Cool-lex algorithm implementations.
 */
 package simplemath
 

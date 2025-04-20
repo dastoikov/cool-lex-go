@@ -11,8 +11,8 @@
 // limitations under the License.
 
 /*
-Package coollex provides implementations of the different Cool-lex algorithms presented in the
-_The Coolest Way to Generate Combinations_ paper by Frank Ruskey and Aaron Williams.
+Package coollex provides implementations of the different Cool-lex algorithms presented in
+"The Coolest Way to Generate Combinations" paper by Frank Ruskey and Aaron Williams.
 
 Hats off.
 
@@ -25,7 +25,9 @@ package coollex
 
 import "iter"
 
-// Elements is an iterator over the elements of a combination.
+// Elements is an iterator over the elements of a combination. The iterator yields exactly
+// k elements. Every element is in the range [0, n).
+
 type Elements = iter.Seq[uint]
 
 // Combinations is an iterator over combinations.
