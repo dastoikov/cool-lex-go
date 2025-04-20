@@ -221,3 +221,11 @@ func main() {
 	}
 }
 ```
+## Development
+
+Ideas:
+
+ * `big.Int`-backed implementation of the Computer Word algorithm. Pros: arbitrary `n`; constant space, `O(1)`.
+ * Multiset permutations in Cool-lex order. See:
+[Loopless Generation of Multiset Permutations using a Constant Number of Variables by Prefix Shifts](https://dl.acm.org/doi/pdf/10.5555/1496770.1496877)
+by Aaron Williams
