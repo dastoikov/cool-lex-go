@@ -14,7 +14,6 @@ package coollex
 
 import (
 	"fmt"
-	"github.com/dastoikov/cool-lex-go/v2/simplemath"
 	"iter"
 	"math"
 	"math/bits"
@@ -40,7 +39,14 @@ func (word *ComputerWord32) next() {
 	r1 := r0 ^ (r0 - 1)
 	r0 = r1 + 1
 	r1 = r1 & r3
-	r0 = simplemath.DozB32(r0&r3, 1) // todo(das): allow external doz func?
+
+	// equivalent to r0 = simplemath.DozB32(r0&r3, 1)
+	// however, rephrasing it as follows results in a slightly better assembly
+	if r0&r3 > 0 {
+		r0 -= 1
+	} else {
+		r0 = 0
+	}
 
 	word.r3 = r3 + r1 - r0
 }
