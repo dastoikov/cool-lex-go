@@ -29,27 +29,27 @@ func BenchmarkLinkedList(b *testing.B) {
 // Number of nodes for benchmarking newLinkedList.
 // That is, the number of elements to choose from, or n.
 const (
-	HIGH   = uint(360_000_000) //
-	MEDIUM = uint(780_000)
-	LOW    = uint(90)
+	benchmarkNewLinkedListHigh   = uint(360_000_000) //
+	benchMarkNewLinkedListMedium = uint(780_000)
+	benchmarkNewLinkedListLow    = uint(90)
 )
 
 func BenchmarkNewLinkedListLow(b *testing.B) {
-	lo := LOW / 3
+	lo := benchmarkNewLinkedListLow / 3
 	for i := 0; i < b.N; i++ {
 		_ = newLinkedList(lo*2, lo)
 	}
 }
 
 func BenchmarkNewLinkedListMedium(b *testing.B) {
-	md := MEDIUM / 3
+	md := benchMarkNewLinkedListMedium / 3
 	for i := 0; i < b.N; i++ {
 		_ = newLinkedList(md*2, md)
 	}
 }
 
 func BenchmarkNewLinkedListHigh(b *testing.B) {
-	up := HIGH / 3
+	up := benchmarkNewLinkedListHigh / 3
 	for i := 0; i < b.N; i++ {
 		_ = newLinkedList(up*2, up)
 	}

@@ -88,9 +88,10 @@ func (word *ComputerWord32) Combinations() Combinations {
 }
 
 // Words returns an iterator over the generated combinations as follows:
-// * a combination is represented by an `int32` value
-// * in a combination, bits that are set represent the elements selected for the combination
-// * the `n` least-significant bits store the combination, the other bits are cleared
+//   - a combination is represented by an `int32` value
+//   - in a combination, bits that are set represent the elements selected for the combination
+//   - the `n` least-significant bits store the combination, with `k` bits set; the `32-n`
+//     most-significant other bits are cleared
 func (word *ComputerWord32) Words() iter.Seq[int32] {
 	return func(yield func(int32) bool) {
 		for word.hasNext() && yield(word.r3) {
