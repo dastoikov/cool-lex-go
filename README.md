@@ -5,6 +5,18 @@ You may need to obtain permission to use Cool-lex, as governed by applicable law
 
 The code in this repository is authored by the cool-lex-go [contributors](CONTRIBUTORS), and is licensed under Apache License, version 2.0 license.
 
+## Overview
+
+All algorithms expose an `algorithm.Combinations()` API. The ComputerWord family additionally exposes
+`algorithm.Words()`. See the `coollex` package documentation for details.
+
+ComputerWord `64-bit` is limited to `n<=63` and is the fastest on 64-bit architectures.
+ComputerWord `32-bit` is limited to `n<=31`. LinkedList and ComputerWord `big.Int` support  arbitrarily large `n`.
+
+LinkedList (LL) versus ComputerWord `big.int` (CW): LL's combinations-generation iteration is much faster. However,
+LL's `[combination.]Elements()` function can perform significantly worse under certain conditions, making the
+overall combinations and elements enumeration slower than CW's (try `n=1000` and `k=2`). CW requires less space.
+
 ## Examples
 
 **LinkedList**
@@ -221,11 +233,47 @@ func main() {
 	}
 }
 ```
+
+**ComputerWord, big.Int**
+
+Its usage is analogous to that of the other ComputerWords algorithms, with `NewComputerWordBig` as
+its constructor.
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/dastoikov/cool-lex-go/v2/coollex"
+)
+
+func main() {
+	// no error for n=3, k=2
+	generator, _ := coollex.NewComputerWordBig(3, 2)
+	for word := range generator.Words() {
+		fmt.Printf("%03b\n", word)
+	}
+	// 011
+	// 110
+	// 101
+
+	generator, _ = coollex.NewComputerWordBig(3, 2)
+	for combination := range generator.Combinations() {
+		for element := range combination {
+			fmt.Print(element)
+		}
+		fmt.Println()
+	}
+	// 01
+	// 12
+	// 02
+}
+```
+
 ## Development
 
 Ideas:
 
- * `big.Int`-backed implementation of the Computer Word algorithm. Pros: arbitrary `n`; constant space, `O(1)`.
  * Multiset permutations in Cool-lex order. See:
 [Loopless Generation of Multiset Permutations using a Constant Number of Variables by Prefix Shifts](https://dl.acm.org/doi/pdf/10.5555/1496770.1496877)
 by Aaron Williams
