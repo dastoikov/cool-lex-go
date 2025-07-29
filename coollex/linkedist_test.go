@@ -56,7 +56,21 @@ func BenchmarkNewLinkedListHigh(b *testing.B) {
 }
 
 func TestValueTrueNodes(t *testing.T) {
-	listOf := func(values []bool) *node {
+	testCases := []struct {
+		input  []bool // blueprint for the linked list
+		expect []uint // indices of value-true nodes
+	}{
+		{[]bool{true}, []uint{0}},
+		{[]bool{false}, []uint{}},
+		{[]bool{false, false}, []uint{}},
+		{[]bool{false, true}, []uint{1}},
+		{[]bool{true, false}, []uint{0}},
+		{[]bool{true, true}, []uint{0, 1}},
+		{[]bool{false, true, false}, []uint{1}},
+	}
+
+	// construct a linked list from the given values
+	newLinkedList := func(values []bool) *node {
 		if len(values) == 0 {
 			return nil
 		}
@@ -68,26 +82,26 @@ func TestValueTrueNodes(t *testing.T) {
 		}
 		return &nodes[0]
 	}
-	test := func(values []bool, expect []uint) {
-		actual := make([]uint, 0, len(expect))
-		for elem := range listOf(values).valueTrueNodes() {
+
+	// testing function
+	test := func(head *node) []uint {
+		actual := make([]uint, 0)
+		for elem := range head.valueTrueNodes() {
 			actual = append(actual, elem)
 		}
-		slices.Sort(expect)
-		if !slices.Equal(expect, actual) {
-			t.Fatalf("Expected %v, got %v, for values %v", expect, actual, values)
+		return actual
+	}
+
+	// test exec
+	for _, tc := range testCases {
+		linkedList := newLinkedList(tc.input)
+		actual := test(linkedList)
+		slices.Sort(tc.expect)
+		slices.Sort(actual)
+		if !slices.Equal(tc.expect, actual) {
+			t.Fatalf("expected %v, got %v, for values %v", tc.expect, actual, tc.input)
 		}
 	}
-	test([]bool{true}, []uint{0})
-	test([]bool{false}, []uint{})
-	test([]bool{false, false}, []uint{})
-	test([]bool{false, true}, []uint{1})
-	test([]bool{true, false}, []uint{0})
-	test([]bool{false, true, true}, []uint{1, 2})
-	test([]bool{true, false, true}, []uint{0, 2})
-	test([]bool{true, true, false}, []uint{0, 1})
-	test([]bool{true, true, true}, []uint{0, 1, 2})
-	test([]bool{false, false, false}, []uint{})
 }
 
 func TestLinkedList(t *testing.T) {
