@@ -92,7 +92,8 @@ func main() {
 }
 ```
 
-Alternatively, if it is preferable to use a custom function for retrieving the set bits from an `int64` combination:
+Alternatively, if it is preferable to use a custom function for retrieving the set bits from an `int64` combination
+(see commit [ef386e12](https://github.com/dastoikov/cool-lex-go/commit/ef386e1246d489103c51461a66e1d9ac68f10ed4) for rationale):
 
 Note: the following code is illustrative.
 
