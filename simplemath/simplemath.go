@@ -26,17 +26,22 @@ import (
 
 // MulRange calculates the product of all integers within the inclusive interval [n1, n2] (or [n2, n1] if n2 < n1).
 //
-// It returns the product if no numeric overflow occurs.  Otherwise, it returns an error,
-// and the partial product calculated before the overflow is stored in 'r'.
-func MulRange(n2, n1 uint) (r uint, err error) {
+// It returns the product if no numeric overflow occurs.
+// Otherwise, it returns an error and the partial product calculated before to the overflow occurred.
+func MulRange(n2, n1 uint) (uint, error) {
 	if n1 > n2 {
 		n1, n2 = n2, n1
 	}
-
-	for r = n1; n1 < n2 && err == nil; r, err = Mul(r, n1) {
+	p := n1
+	for n1 < n2 {
 		n1++
+		t, e := Mul(p, n1)
+		if e != nil {
+			return p, e
+		}
+		p = t
 	}
-	return
+	return p, nil
 }
 
 // Add returns the sum of a and b if no numeric overflow occurs, or an error otherwise.

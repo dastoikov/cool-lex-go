@@ -23,8 +23,8 @@ func testOverflow(op func(uint, uint) (uint, error), a, b uint, overflow bool, e
 	if (err != nil) != overflow {
 		return fmt.Errorf("overflow: expected %v, got (%v)", overflow, err)
 	}
-	if !overflow && r != expect[0] {
-		return fmt.Errorf("overflow: expected %v, got %v, for a %d and b %d", expect[0], r, a, b)
+	if len(expect) > 0 && r != expect[0] {
+		return fmt.Errorf("overflow: expected %v, got %v, for a=%d and b=%d and overflow=%t", expect[0], r, a, b, overflow)
 	}
 	return nil
 }
@@ -54,6 +54,8 @@ func TestMulRange(t *testing.T) {
 	test(1, 3, false, 6)
 	test(0, 1, false, 0)
 	test(0, 2, false, 0)
+	test(3, 3, false, 3)
+	test(1, 21, true, 2432902008176640000 /*20!*/)
 }
 
 func TestAdd(t *testing.T) {
