@@ -80,11 +80,17 @@ func TestNumComb(t *testing.T) {
 			t.Fatal(err)
 		}
 		if expect != actual {
-			t.Fatalf("num comb: expected %d, got %d", expect, actual)
+			t.Fatalf("num comb: expected %d, got %d, for n=d%d and k=%d", expect, actual, n, k)
 		}
 	}
 	test(2, 0, 1)
 	test(3, 2, 3)
+	test(4, 2, 6)
+	test(4, 3, 4)
+	test(5, 3, 10)
+	test(8, 3, 56)
+	test(8, 5, 56)
+	test(11, 5, 462)
 }
 
 // --- DOZ ---

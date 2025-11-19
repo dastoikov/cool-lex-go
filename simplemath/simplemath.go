@@ -73,19 +73,18 @@ func NumComb(n, k uint) (uint, error) {
 	if k > n {
 		return 0, fmt.Errorf("k (%d) > n (%d)", k, n)
 	}
-	if k == 0 {
-		return 1, nil
+	if k > n-k {
+		k = n - k // eliminate common factors; conditional move
 	}
-
-	cn, err := MulRange(n, n-k+1)
-	if err != nil {
-		return 0, err
+	c := uint(1)
+	for i := c; i <= k; i++ {
+		p, err := Mul(c, n-k+i)
+		if err != nil {
+			return c, err
+		}
+		c = p / i
 	}
-	ck, err := Factorial(k)
-	if err != nil {
-		return 0, err
-	}
-	return cn / ck, nil
+	return c, nil
 }
 
 // Factorial returns the factorial of n, or 1 for n=0.
