@@ -27,7 +27,7 @@ import (
 // MulRange calculates the product of all integers within the inclusive interval [n1, n2] (or [n2, n1] if n2 < n1).
 //
 // It returns the product if no numeric overflow occurs.
-// Otherwise, it returns an error and the partial product calculated before to the overflow occurred.
+// Otherwise, it returns an error and the partial product calculated before the overflow occurred.
 func MulRange(n2, n1 uint) (uint, error) {
 	if n1 > n2 {
 		n1, n2 = n2, n1
