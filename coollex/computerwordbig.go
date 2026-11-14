@@ -38,30 +38,33 @@ func (word *ComputerWordBig) hasNext() bool {
 
 // next advances to the next combination in cool-lex order
 func (word *ComputerWordBig) next() {
-
+	// Blueprint from paper:
 	// 1: r0 := r3 & (r3 + 1)
 	// 2: r1 := r0 ^ (r0 - 1)
 	// 3: r0 = r1 + 1
 	// 4: r1 = r1 & r3
 	// 5: r0 = DOZ(r0&r3, 1)
 	// 6: r3 = r3 + r1 - r0
-
+	//
+	// Equivalent to:
+	// 1: r1 := r3 & -^r3
+	// 2: r1 = r1 ^ ^-r1
+	// 3: r0 = r3 + (r1 & r3)
+	// 4: if -^r1 &r3 > 0
+	// 5:    r0 = -^r0 - r1
+	// 6: r3 = r0
 	r3 := word.r3
 	r0 := word.r0.Set(r3)
-	r0.Add(r0, bigOne).And(r0, r3)
+	r0.Not(r0).Neg(r0).And(r0, r3)
 
 	r1 := word.r1.Set(r0)
-	r1.Sub(r1, bigOne).Xor(r1, r0)
+	r1.Neg(r1).Not(r1).Xor(r1, r0)
 
-	r0.Add(r1, bigOne)
-	r1.And(r1, r3)
-
-	r0.And(r0, r3)
-	if r0.Cmp(bigOne) >= 0 {
-		r0.Sub(r0, bigOne)
+	r0.Set(r3).And(r0, r1).Add(r0, r3)
+	if r1.Not(r1).Neg(r1).And(r1, r3).BitLen() > 0 {
+		r0.Not(r0).Neg(r0).Sub(r0, r1)
 	}
-
-	word.r3.Add(r3, r1).Sub(r3, r0)
+	word.r3.Set(r0)
 }
 
 // newComputerWordBig initializes the algorithm for the specified number of 0-bits (s) and number of 1-bits (t).
