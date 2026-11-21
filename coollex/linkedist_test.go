@@ -105,8 +105,5 @@ func TestValueTrueNodes(t *testing.T) {
 }
 
 func TestLinkedList(t *testing.T) {
-	testCoollex(t, func(n, k uint) (coollexAlgorithm, error) {
-		list, err := NewLinkedList(n, k)
-		return &list, err
-	})
+	testCoollex(t, construct(NewLinkedList))
 }

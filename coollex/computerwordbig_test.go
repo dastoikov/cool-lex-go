@@ -25,8 +25,5 @@ func BenchmarkComputerWordBig(b *testing.B) {
 }
 
 func TestComputerWordBig(t *testing.T) {
-	testCoollex(t, func(n, k uint) (coollexAlgorithm, error) {
-		w, err := NewComputerWordBig(n, k)
-		return &w, err
-	})
+	testCoollex(t, construct(NewComputerWordBig))
 }

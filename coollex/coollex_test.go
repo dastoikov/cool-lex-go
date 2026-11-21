@@ -17,16 +17,41 @@ import (
 	"testing"
 )
 
+// coollexAlgorithm captures the common combination-generation interface of
+// the various Cool-lex algorithms, in order to facilitate uniform testing.
+type coollexAlgorithm interface {
+	// Combinations returns an iterator over the generated combinations.
+	// The name is chosen deliberately, to match actual implementations.
+	Combinations() Combinations
+}
+
+// coollexConstructor captures the common constructor interface of the various
+// Cool-lex algorithms, in order to facilitate uniform testing.
+type coollexConstructor func(n, k uint) (coollexAlgorithm, error)
+
+// construct adapts a Cool-lex algorithm constructor function so that it
+// appears to be returning a `coollexAlgorithm`.
+func construct[T any, PT interface {
+	*T
+	coollexAlgorithm
+}](f func(uint, uint) (T, error)) coollexConstructor {
+	return func(n, k uint) (coollexAlgorithm, error) {
+		w, err := f(n, k)
+		var ptr PT = &w
+		return ptr, err
+	}
+}
+
 const (
 	// `n` and `k` for benchmarking the different Cool-lex algorithms
 	benchAlgorithmN = 31
 	benchAlgorithmK = 3
 )
 
-// verifyNoCombs verifies that `generator` does not yield combinations for `n` and `k`.
-// It returns an error if any are yielded.
-func verifyNoCombs(n, k uint, generator func(n, k uint) (coollexAlgorithm, error)) error {
-	alg, _ := generator(n, k)
+// verifyCombsEmpty verifies that the algorithm does not yield combinations
+// for `n` and `k`, returning an error if any are yielded.
+func (c coollexConstructor) verifyCombsEmpty(n, k uint) error {
+	alg, _ := c(n, k)
 	for combination := range alg.Combinations() {
 		for element := range combination {
 			return fmt.Errorf("element %v found for n %v and k %v", element, n, k)
@@ -36,19 +61,19 @@ func verifyNoCombs(n, k uint, generator func(n, k uint) (coollexAlgorithm, error
 	return nil
 }
 
-// verifyCombs verifies that combinations yielded by `generator` for `n` and `k` have the following properties:
-//   - the number of combinations generated is correct;
-//   - the number of elements in each combination is correct;
-//   - the number of combinations where each element occurs is correct.
+// verifyCombs verifies that the algorithm yields combinations for `n` and `k`
+// such that:
+//   - the number of combinations yielded is correct
+//   - the number of elements yielded in each combination is correct
+//   - the number of combinations where each element occurred is correct
 //
 // It does not test combinations are yielded in Cool-lex order.
 // It returns an error if `generator` fails to yield combinations.
-func verifyCombs(n, k uint, generator func(n, k uint) (coollexAlgorithm, error)) error {
-	// array index denotes an element
-	// value at given index denotes how many times this element appeared in a combination
+func (c coollexConstructor) verifyCombs(n, k uint) error {
+	// how many times (value at index) an element (index in slice) appeared in a combination
 	hits := make([]uint, n)
 
-	alg, err := generator(n, k)
+	alg, err := c(n, k)
 	if err != nil {
 		return err
 	}
@@ -74,6 +99,8 @@ func verifyCombs(n, k uint, generator func(n, k uint) (coollexAlgorithm, error))
 	if numComb != expectedNumComb {
 		return fmt.Errorf("number of combinations: expected %d, got %d, for n %d and k %d", expectedNumComb, numComb, n, k)
 	}
+
+	// number of combinations where each element occurred
 	occur, err := simplemath.NumComb(n-1, k-1)
 	if err != nil {
 		return err
@@ -85,20 +112,20 @@ func verifyCombs(n, k uint, generator func(n, k uint) (coollexAlgorithm, error))
 	}
 	return nil
 }
-func testCoollex(t *testing.T, generator func(n, k uint) (coollexAlgorithm, error)) {
+func testCoollex(t *testing.T, c coollexConstructor) {
 	testCases := []struct {
 		n, k uint
-		test func(n, k uint, generator func(n, k uint) (coollexAlgorithm, error)) error
+		test func(n, k uint) error
 	}{
-		{15, 8, verifyCombs},
-		{15, 7, verifyCombs},
-		{9, 9, verifyCombs},
-		{1, 1, verifyCombs},
-		{9, 0, verifyNoCombs},
-		{2, 0, verifyNoCombs},
+		{15, 8, c.verifyCombs},
+		{15, 7, c.verifyCombs},
+		{9, 9, c.verifyCombs},
+		{1, 1, c.verifyCombs},
+		{9, 0, c.verifyCombsEmpty},
+		{2, 0, c.verifyCombsEmpty},
 	}
 	for _, tc := range testCases {
-		err := tc.test(tc.n, tc.k, generator)
+		err := tc.test(tc.n, tc.k)
 		if err != nil {
 			t.Fatal(err)
 		}

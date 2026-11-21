@@ -81,10 +81,7 @@ func TestElements32(t *testing.T) {
 }
 
 func TestComputerWord32(t *testing.T) {
-	testCoollex(t, func(n, k uint) (coollexAlgorithm, error) {
-		w, err := NewComputerWord32(n, k)
-		return &w, err
-	})
+	testCoollex(t, construct(NewComputerWord32))
 
 	if _, err := NewComputerWord32(32, 1); err == nil {
 		t.Fatalf("error is expected for n>=32")

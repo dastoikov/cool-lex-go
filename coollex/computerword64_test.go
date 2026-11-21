@@ -81,10 +81,7 @@ func TestElements64(t *testing.T) {
 }
 
 func TestComputerWord64(t *testing.T) {
-	testCoollex(t, func(n, k uint) (coollexAlgorithm, error) {
-		w, err := NewComputerWord64(n, k)
-		return &w, err
-	})
+	testCoollex(t, construct(NewComputerWord64))
 
 	if _, err := NewComputerWord64(64, 1); err == nil {
 		t.Fatalf("error is expected for n>=64")

@@ -31,8 +31,3 @@ type Elements = iter.Seq[uint]
 
 // Combinations is an iterator over combinations.
 type Combinations = iter.Seq[Elements]
-
-// internal type to facilitate generic testing
-type coollexAlgorithm interface {
-	Combinations() Combinations
-}
