@@ -47,8 +47,8 @@ func (word *ComputerWordBig) next() {
 	// 6: r3 = r3 + r1 - r0
 	//
 	// Equivalent to:
-	// 1: r1 := r3 & -^r3
-	// 2: r1 = r1 ^ ^-r1
+	// 1: r0 := r3 & -^r3
+	// 2: r1 := r1 ^ ^-r1
 	// 3: r0 = r3 + (r1 & r3)
 	// 4: if -^r1 &r3 > 0
 	// 5:    r0 = -^r0 - r1
